@@ -14,21 +14,21 @@ echo "remove stopwords"
 # in the training set 
 python bin/filter_dict.py --remove_stop_words $CRAWLED_DICT $ROOT_DICT/all.json
 
-# echo "split the dict"
-# # have to do that before merging, otherwise we lose the info on similar senses
-# python bin/split_dict_core.py --seed=1 $ROOT_DICT/all.json $ROOT_DICT/ $VALID_SIZE
+echo "split the dict"
+# have to do that before merging, otherwise we lose the info on similar senses
+python bin/split_dict_core.py --seed=1 $ROOT_DICT/all.json $ROOT_DICT/ $VALID_SIZE
 
-# for S in "train" "valid" "test" "all"
-# do
-# 	python bin/merge_definitions.py --seed 0 $ROOT_DICT/$S.json $ROOT_DICT/$S.json
-# done
+for S in "train" "valid" "test" "all"
+do
+	python bin/merge_definitions.py --seed 0 $ROOT_DICT/$S.json $ROOT_DICT/$S.json
+done
 
-# exit
-# # build vocabulary file based on TRAIN (we ignore validation here)
-# python bin/build_vocab.py $ROOT_DICT/train $ROOT_DICT/vocab.txt
+exit
+# build vocabulary file based on TRAIN (we ignore validation here)
+python bin/build_vocab.py $ROOT_DICT/train $ROOT_DICT/vocab.txt
 
-# # create symlinks from train.json to all, and empty validation
-# cd $ROOT_DICT
-# ln -s all.json train.json
-# echo "{}" > valid.json
-# echo "{}" > test.json
+# create symlinks from train.json to all, and empty validation
+cd $ROOT_DICT
+ln -s all.json train.json
+echo "{}" > valid.json
+echo "{}" > test.json
