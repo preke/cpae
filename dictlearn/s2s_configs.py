@@ -138,10 +138,7 @@ c['reconstruction_coef'] = 1
 c['mon_freq_valid'] = 0
 c['n_valid_early'] = 0
 c['n_epochs'] = 50
-c['num_input_words'] = 50000 # if more than the total number of words, as is 
-# the case here, just reduces to the total number of words in the vocab file
-# Different kind of checkpointing here
-# It only saves one model, that's saved every 10000 batches.
+c['num_input_words'] = 50000 
 c['save_freq_batches'] = 10000
 c['checkpoint_every_n_epochs'] = 0
 c['proximity_coef'] = 1
