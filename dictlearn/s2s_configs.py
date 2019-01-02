@@ -1,3 +1,4 @@
+#coding=utf-8
 from dictlearn.config_registry import ConfigRegistry
 
 configs_ae = ConfigRegistry() 
@@ -138,7 +139,7 @@ c['reconstruction_coef'] = 1
 c['mon_freq_valid'] = 0
 c['n_valid_early'] = 0
 c['n_epochs'] = 50
-c['num_input_words'] = 50000 
+c['num_input_words'] = 50000
 c['save_freq_batches'] = 10000
 c['checkpoint_every_n_epochs'] = 0
 c['proximity_coef'] = 1
