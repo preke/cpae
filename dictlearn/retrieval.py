@@ -20,7 +20,7 @@ import fuel
 
 from dictlearn.util import vec2str
 # from dictlearn.corenlp import StanfordCoreNLP
-from corenlp import StanfordCoreNLP
+from stanfordcorenlp import StanfordCoreNLP
 
 logger = logging.getLogger(__name__)
 
