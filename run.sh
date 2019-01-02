@@ -3,7 +3,7 @@
 # source activate tmp_cpae
 export PYTHONPATH=$PWD:$PYTHONPATH
 export FUEL_DATA_PATH=$PWD"/data/en_wn_full"
-export THEANO_FLAGS="optimizer=fast_run,device=cuda1,floatX=float32,gpuarray.preallocate=1,allow_gc=False"
+export THEANO_FLAGS="optimizer=fast_run,device=cuda1,dnn.enabled=False,floatX=float32,gpuarray.preallocate=1,allow_gc=False"
 
 RESULTS_DIR="results/en_wn_full"
 CONFIG_NAME="s2sg_w2v_defs_1_pen128"
