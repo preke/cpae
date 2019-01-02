@@ -19,7 +19,8 @@ from wordnik import swagger, WordApi, AccountApi
 import fuel
 
 from dictlearn.util import vec2str
-from dictlearn.corenlp import StanfordCoreNLP
+# from dictlearn.corenlp import StanfordCoreNLP
+from corenlp import StanfordCoreNLP
 
 logger = logging.getLogger(__name__)
 
