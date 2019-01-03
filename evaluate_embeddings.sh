@@ -6,7 +6,7 @@
 # Set some flags.
 export PYTHONPATH=$PWD:$PWD/word-embeddings-benchmarks:$PYTHONPATH
 export FUEL_DATA_PATH=$PWD"/data/en_wn_full"
-export THEANO_FLAGS="optimizer=fast_run,device=cuda0,floatX=float32,gpuarray.preallocate=1,allow_gc=False"
+export THEANO_FLAGS="optimizer=fast_run,device=cuda1,floatX=float32,gpuarray.preallocate=1,allow_gc=False"
 export WEB_DATA="$PWD"
 
 # RESULTS_DIR contains directories which each contains a file named
