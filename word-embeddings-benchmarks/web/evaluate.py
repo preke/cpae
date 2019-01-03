@@ -11,6 +11,7 @@ from .datasets.categorization import fetch_AP, fetch_battig, fetch_BLESS, fetch_
 from web.analogy import *
 from six import iteritems
 from web.embedding import Embedding, PolyEmbedding
+from scipy.stats.stats import spearmanr
 
 logger = logging.getLogger(__name__)
 
@@ -371,6 +372,18 @@ def evaluate_similarity_multi(w, X, y, model, missing_words = 'mean'):
     scores = np.array([cosine_similarity(v1, v2, model) for v1, v2 in zip(A, B)])
     return scipy.stats.spearmanr(scores, y).correlation
 
+def read_test_set():
+    testsets = os.listdir("/home/yangruosong/cpae/word-embeddings-benchmarks/web/ws/")
+    data = []
+    for f in testsets:
+        test = []
+        with open("/home/yangruosong/cpae/word-embeddings-benchmarks/web/ws/" + f,"r") as f:
+            for line in f:
+                x, y, sim = line.strip().lower().split()
+                test.append(((x, y), float(sim)))
+        data.append(test)
+    return testsets,data
+
 def evaluate_similarity(w, X, y, missing_words = 'mean'):
     """
     Calculate Spearman correlation between cosine similarity of the model
@@ -424,7 +437,51 @@ def evaluate_similarity(w, X, y, missing_words = 'mean'):
     #scores = np.array([v1.dot(v2.T)/(np.linalg.norm(v1)*np.linalg.norm(v2)) for v1, v2 in zip(A, B)])
     return scipy.stats.spearmanr(scores, y).correlation
 
+def get(w,word,vector):
+    if word in w:
+        return w[word]
+    elif word.lower() in w:
+        return w[word.lower()]
+    else:
+        return vector
 
+
+def evaluateSimilarity(w,data):
+    missing_words = 0
+    X = []
+    y = []
+    for d in data: 
+        X.append([d[0][0],d[0][1]]) 
+        y.append(d[1])
+    X = np.array(X)
+    y = np.array(y)
+    n_missing_words = count_missing_words(w, X)
+    if n_missing_words > 0:
+        logger.warning("Missing {} words.".format(n_missing_words))
+    mean_vector = np.mean(w.vectors, axis=0, keepdims=True)
+    A = np.vstack(w.get(word.lower(),mean_vector) for word in X[:, 0])
+    B = np.vstack(w.get(word.lower(),mean_vector) for word in X[:, 1])
+    #np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+    #scores = np.array([v1.dot(v2.T) / (math.sqrt(np.sum(v1 ** 2)) * math.sqrt(np.sum(v2 ** 2))) for v1, v2 in zip(A, B)])
+    scores = np.array([np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)) for v1, v2 in zip(A, B)])
+    '''
+    with open("men_results.txt", "w") as f:
+        for w1,w2,r,s in zip(X[:, 0],X[:, 1],y,scores):
+            print(w1,w2,r,s)
+            f.write(w1 + "\t" + w2 + "\t" + str(r) + "\t" + str(s) + "\n")
+    print(spearmanr(scores, y)[0])
+    '''
+    return spearmanr(scores, y).correlation
+
+def evaluate_on_all(w, only_sim_rel=False):
+    if isinstance(w, dict):
+        w = Embedding.from_dict(w)
+    
+    testsets,data = read_test_set()
+    for i,d in enumerate(data):
+        print testsets[i] + ": " + "word_embedding_Result = " + str(evaluateSimilarity(w,d)) + "\n"
+    return None
+'''    
 def evaluate_on_all(w, only_sim_rel=False):
     """
     Evaluate Embedding on all fast-running benchmarks
@@ -440,8 +497,8 @@ def evaluate_on_all(w, only_sim_rel=False):
       DataFrame with results, one per column.
     """
     if isinstance(w, dict):
-        w = Embedding.from_dict(w)
-
+        w = Embedding.from_dict(w)     
+        
     # Calculate results on similarity
     logger.info("Calculating similarity benchmarks")
     similarity_tasks = {
@@ -511,7 +568,7 @@ def evaluate_on_all(w, only_sim_rel=False):
         results = sim
 
     return results
-
+'''
 def evaluate_on_all_multi(w, model):
     """
     Evaluate Embedding on all fast-running benchmarks
